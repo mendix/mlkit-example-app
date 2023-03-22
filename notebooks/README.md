@@ -28,3 +28,8 @@ The standard [dataset](https://www.kaggle.com/datasets/arshid/iris-flower-datase
 ### Titanic Survivors
 
 In this [example](titanic_survivors.ipynb), we use the [titanic dataset integrated wiht ONNX pipelines](https://www.kaggle.com/code/wanderfj/titanic-with-sklearn-pipelines) in order to display how a full XGBoost model can be integrated along with preprocessors in a Scikit learn pipeline and exported to ONNX.
+
+
+### Other Models ###
+
+You can finf examples on how to convert other models, you can refer to the [Oficial documentation and exaples](https://github.com/onnx/tutorials#converting-to-onnx-format)
