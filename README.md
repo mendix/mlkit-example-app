@@ -1,4 +1,4 @@
-# MlKit Demo
+# Mendix ML Kit Demo
 
 Here you can get the resources for start creating Smart Apps with [MLKit](https://docs.mendix.com/refguide/machine-learning-kit/)
 Happy Hacking!
@@ -11,7 +11,7 @@ Just create a new Mendix App, go to 'Download from Version Control Server', choo
 
 Please make sure that the bertsquad-12-int8.onnx file is present in the /path/to/your/app/mlsource/bert folder. You can download it from https://shorturl.at/zCEGO if needed.
 
-### Note for Parallell Users
+### Note for Parallels Users
 This demo is packed with some computer vision libaries that may require a Virtual Machine restart or two before they are properly recognized
 
 ### Avaliable Demos and models
@@ -44,7 +44,7 @@ Find here a standard ResNet50 example fully implemented. Please refer to the [ON
 
 ##### Style Transfer: Fast Neural Style
 
-Yes, you can make an app that turns any picture into a Verneer with Mendix. Here we show you how can you apply a Mosaic style transfer from [this](https://github.com/onnx/models/tree/main/vision/style_transfer/fast_neural_style) model in ONNX Zoo, along with pre and post processors.
+Yes, you can make an app that turns any picture into a Vermeer with Mendix. Here we show you how can you apply a Mosaic style transfer from [this](https://github.com/onnx/models/tree/main/vision/style_transfer/fast_neural_style) model in ONNX Zoo, along with pre and post processors.
 
 #### Language Models with Generative Interfaces
 
