@@ -57,3 +57,7 @@ In the [notebooks](notebooks) folder you can find examples on how to create mode
 ## Where to go next
 
 Sky is the limit! Once you master how to use MLKit, you may want to create your own models (Refer to the [Training your own model](#training-your-own-model) section for examples), go to the [ONNX Model Zoo](https://github.com/onnx/models) or take a look at [Hugging Face](https://huggingface.co/) and how they, like us, use [ONNX](https://huggingface.co/docs/transformers/serialization) for fast deploying your models into production.
+
+## Known Issues
+
+If you are having errors launching the app. Update MendixSSO and CommunityCommons packages from marketplace
