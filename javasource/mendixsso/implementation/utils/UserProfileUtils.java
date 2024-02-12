@@ -21,19 +21,21 @@ public class UserProfileUtils {
 
     public static UserProfile getUserProfile(IContext context, Map<String, Object> userInfoJSONObject) throws ParseException {
         final Map<String, Object> mxProfileClaim = JSONObjectUtils.getJSONObject(userInfoJSONObject, MX_USER_PROFILE_V_1);
-        return extractUserProfileFromMxProfileClaim(context, mxProfileClaim);
+        if (mxProfileClaim != null ) {
+            return extractUserProfileFromMxProfileClaim(context, mxProfileClaim);
+        } else {
+            return new UserProfile(context);
+        }
     }
 
     private static UserProfile extractUserProfileFromMxProfileClaim(IContext context, Map<String, Object> mxProfileClaim) throws ParseException {
         final UserProfile userProfile = new UserProfile(context);
 
-        userProfile.setOpenId(JSONObjectUtils.getString(mxProfileClaim, "openid2_id"));
         userProfile.setDisplayName(JSONObjectUtils.getString(mxProfileClaim, "display_name"));
         userProfile.setAvatarThumbnailUrl(JSONObjectUtils.getString(mxProfileClaim, "avatar_thumb_url"));
         userProfile.setAvatarUrl(JSONObjectUtils.getString(mxProfileClaim, "avatar_url"));
         userProfile.setBio(JSONObjectUtils.getString(mxProfileClaim, "bio"));
         userProfile.setWebsite(JSONObjectUtils.getString(mxProfileClaim, "website"));
-        userProfile.setEmailAddress(JSONObjectUtils.getString(mxProfileClaim, "email"));
         userProfile.setPhone(JSONObjectUtils.getString(mxProfileClaim, "phone_number"));
         userProfile.setJobTitle(JSONObjectUtils.getString(mxProfileClaim, "job_title"));
         userProfile.setDepartment(JSONObjectUtils.getString(mxProfileClaim, "job_department"));

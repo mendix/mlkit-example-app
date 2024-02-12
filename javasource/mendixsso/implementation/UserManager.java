@@ -36,35 +36,34 @@ public class UserManager {
                     String.format(
                             "Authorizing the user with UUID '%s' has failed. Triggering rollback.",
                             uuid));
-            c.rollbackTransAction();
+            c.rollbackTransaction();
             throw e;
         }
     }
 
-    public static User findOrCreateUser(UserProfile userProfile) throws CoreException {
+    public static User findOrCreateUser(UserProfile userProfile, final String userUUID, final String emailAddress) throws CoreException {
         final IContext c = Core.createSystemContext();
         c.startTransaction();
-        final String uuid = OpenIDUtils.extractUUID(userProfile.getOpenId());
         try {
 
-            ForeignIdentity foreignIdentity = ForeignIdentityUtils.retrieveForeignIdentity(c, uuid);
+            ForeignIdentity foreignIdentity = ForeignIdentityUtils.retrieveForeignIdentity(c, userUUID);
             final User user;
 
             // Existing Foreign Identity
             if (foreignIdentity != null) {
-                user = updateUser(c, userProfile, foreignIdentity);
+                user = updateUser(c, userProfile, foreignIdentity, emailAddress);
                 LOG.debug(
                         String.format(
                                 "User associated to the foreign identity with UUID %s has been updated.",
-                                uuid));
+                                userUUID));
             }
 
             // New Foreign Identity
             else {
                 // Create a new user wih an associated foreign identity
-                user = createUserWithForeignIdentity(c, userProfile, uuid);
+                user = createUserWithForeignIdentity(c, userProfile, userUUID, emailAddress);
                 LOG.debug(
-                        String.format("New foreign identity with UUID %s has been created.", uuid));
+                        String.format("New foreign identity with UUID %s has been created.", userUUID));
             }
 
             c.endTransaction();
@@ -73,16 +72,16 @@ public class UserManager {
             LOG.warn(
                     String.format(
                             "Find or create user for UUID '%s' caught exception. Triggering rollback.",
-                            uuid));
-            c.rollbackTransAction();
+                            userUUID));
+            c.rollbackTransaction();
             throw e;
         }
     }
 
     private static User createUserWithForeignIdentity(
-            IContext context, UserProfile userProfile, String uuid) throws CoreException {
+            IContext context, UserProfile userProfile, String uuid, String emailAddress) throws CoreException {
         final IMendixObject mxNewUser =
-                UserMapper.getInstance().createUser(context, userProfile, uuid);
+                UserMapper.getInstance().createUser(context, userProfile, uuid, emailAddress);
 
         final boolean hasAccess =
                 Core.microflowCall("MendixSSO.RetrieveUserRoles")
@@ -103,7 +102,7 @@ public class UserManager {
     }
 
     private static User updateUser(
-            IContext c, UserProfile userProfile, ForeignIdentity foreignIdentity)
+            IContext c, UserProfile userProfile, ForeignIdentity foreignIdentity, String emailAddress)
             throws CoreException {
         final User user = foreignIdentity.getForeignIdentity_User();
 
@@ -121,11 +120,11 @@ public class UserManager {
                 // note: the foreign identity is deleted because of delete behavior
 
                 // and create a fresh new user instead
-                return createUserWithForeignIdentity(c, userProfile, foreignIdentity.getUUID());
+                return createUserWithForeignIdentity(c, userProfile, foreignIdentity.getUUID(), emailAddress);
             }
         }
 
-        UserMapper.getInstance().updateUser(c, user, userProfile, foreignIdentity.getUUID());
+        UserMapper.getInstance().updateUser(c, user, userProfile, foreignIdentity.getUUID(), emailAddress);
         retrieveUserRolesAndCommitUser(c, user, foreignIdentity.getUUID());
 
         return user;

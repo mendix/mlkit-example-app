@@ -72,6 +72,8 @@ public class ErrorUtils {
             final String templateFilePath =
                     Core.getConfiguration().getResourcesPath()
                             + File.separator
+                            + "mendixsso"
+                            + File.separator
                             + "templates"
                             + File.separator
                             + "sso_error.html";
@@ -79,6 +81,8 @@ public class ErrorUtils {
             final String renderedTemplate = TemplateRenderer.render(templateFilePath, templateVars);
 
             try (OutputStream out = response.getOutputStream()) {
+                // Ignore Veracode issues: CWE-209 and CWE-201; false positive. The templates do not
+                // contain any sensitive data.
                 out.write(renderedTemplate.getBytes(StandardCharsets.UTF_8));
             }
         } catch (IOException | IllegalArgumentException e) {

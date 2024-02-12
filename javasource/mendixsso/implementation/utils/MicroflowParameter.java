@@ -3,7 +3,6 @@ package mendixsso.implementation.utils;
 import com.mendix.core.Core;
 import com.mendix.systemwideinterfaces.MendixRuntimeException;
 import com.mendix.systemwideinterfaces.core.IDataType;
-
 import java.util.Map;
 
 class MicroflowParameter {

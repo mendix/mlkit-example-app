@@ -68,7 +68,9 @@
     .link-back {
         color: $font-color-detail;
 
-        .glyphicon {
+        .glyphicon,
+        .mx-icon-lined,
+        .mx-icon-filled {
             top: 2px;
         }
     }

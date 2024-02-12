@@ -52,7 +52,9 @@
                     }
 
                     // Image
-                    .glyphicon {
+                    .glyphicon,
+                    .mx-icon-lined,
+                    .mx-icon-filled {
                         font-size: $navtopbar-glyph-size;
                     }
                 }
@@ -160,7 +162,9 @@
                     }
 
                     // Image
-                    .glyphicon {
+                    .glyphicon,
+                    .mx-icon-lined,
+                    .mx-icon-filled {
                         font-size: $navsidebar-glyph-size;
                     }
                 }
@@ -212,7 +216,9 @@
     }
 
     .hide-icons.mx-navbar {
-        .glyphicon {
+        .glyphicon,
+        .mx-icon-lined,
+        .mx-icon-filled {
             display: none;
         }
     }

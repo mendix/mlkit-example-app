@@ -7,6 +7,7 @@ import com.mendix.m2ee.api.IMxRuntimeResponse;
 import com.mendix.systemwideinterfaces.MendixRuntimeException;
 import com.mendix.systemwideinterfaces.core.ISession;
 import mendixsso.implementation.ConfigurationManager;
+import mendixsso.implementation.ContinuationURLManager;
 import mendixsso.implementation.handlers.OpenIDHandler;
 import mendixsso.proxies.constants.Constants;
 
@@ -97,8 +98,10 @@ public final class OpenIDUtils {
                 throw new IllegalArgumentException("Javascript injection detected!");
             } else if (!continuation.startsWith("http://") && !continuation.startsWith("https://")) {
                 resp.addHeader(LOCATION_HEADER_NAME, getApplicationUrl(req) + continuation);
-            } else {
+            } else if(ContinuationURLManager.getInstance().isRedirectionAllowedForUrl(continuation)) {
                 resp.addHeader(LOCATION_HEADER_NAME, continuation);
+            } else {
+                throw new IllegalArgumentException("Redirection to the specified URL is not allowed!");
             }
         }
     }

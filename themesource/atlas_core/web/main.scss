@@ -214,6 +214,16 @@
     @include radio-button();
 }
 
+@import "core/widgets/scroll-container-react";
+@import "core/widgets/scroll-container-dojo";
+@if not $exclude-scroll-container {
+    @if $use-modern-client {
+        @include scroll-container-react();
+    } @else {
+        @include scroll-container-dojo();
+    }
+}
+
 @import "core/widgets/tab-container";
 @if not $exclude-tab-container {
     @include tab-container();

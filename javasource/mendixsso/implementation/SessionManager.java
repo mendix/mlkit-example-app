@@ -1,7 +1,5 @@
 package mendixsso.implementation;
 
-import static mendixsso.proxies.constants.Constants.getLogNode;
-
 import com.mendix.core.Core;
 import com.mendix.core.CoreException;
 import com.mendix.logging.ILogNode;
@@ -13,10 +11,6 @@ import com.mendix.systemwideinterfaces.core.IUser;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.oauth2.sdk.ParseException;
 import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import mendixsso.implementation.utils.MendixUtils;
 import mendixsso.implementation.utils.OpenIDUtils;
 import mendixsso.implementation.utils.TokenUtils;
@@ -24,6 +18,13 @@ import mendixsso.proxies.ForeignIdentity;
 import mendixsso.proxies.PlatformSession;
 import system.proxies.Session;
 import system.proxies.User;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import static mendixsso.proxies.constants.Constants.getLogNode;
 
 public class SessionManager {
 
@@ -62,8 +63,8 @@ public class SessionManager {
   }
 
   public static void writeSessionCookies(ISession session, IMxRuntimeResponse resp) {
-    resp.addCookie(XAS_SESSION_ID, session.getId().toString(), "/", "", -1, true);
-    resp.addCookie(XASID_COOKIE, "0." + Core.getXASId(), "/", "", -1, true);
+    resp.addCookie(XAS_SESSION_ID, session.getId().toString(), "/", "", -1, true, true);
+    resp.addCookie(XASID_COOKIE, "0." + Core.getXASId(), "/", "", -1, true, true);
   }
 
   public static void logoutAllSessionsOfForeignIdentity(

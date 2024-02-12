@@ -14,12 +14,13 @@ import com.mendix.logging.ILogNode;
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
 import com.mendix.webui.CustomJavaAction;
+import com.nimbusds.jose.util.JSONObjectUtils;
 import mendixsso.implementation.UserManager;
 import mendixsso.implementation.utils.ForeignIdentityUtils;
-import mendixsso.implementation.utils.OpenIDUtils;
 import mendixsso.implementation.utils.UserProfileUtils;
 import mendixsso.proxies.UserProfile;
 import mendixsso.proxies.constants.Constants;
+import java.util.Map;
 
 public class FindOrCreateUserWithUserInfo extends CustomJavaAction<IMendixObject>
 {
@@ -38,21 +39,25 @@ public class FindOrCreateUserWithUserInfo extends CustomJavaAction<IMendixObject
         final ILogNode LOG = Core.getLogger(Constants.getLogNode());
         final IContext context = Core.createSystemContext();
         IMendixObject user = null;
-        String uuid = null;
+        String userUUID = null;
+		String emailAddress = null;
         try {
-            final UserProfile userProfile = UserProfileUtils.getUserProfile(context, UserInfoJSON);
+			final Map<String, Object> userInfoJSONObject = JSONObjectUtils.parse(this.UserInfoJSON);
 
-            // We assume that openId cannot be null since that would imply bigger issues higher up in the SSO stack.
-            uuid = OpenIDUtils.extractUUID(userProfile.getOpenId());
-            ForeignIdentityUtils.lockForeignIdentity(uuid);
+            // UserInfo response must already have the required claims ( sub, email and mx:user:profile:v1)
+			final UserProfile userProfile = UserProfileUtils.getUserProfile(context, userInfoJSONObject);
+			emailAddress = JSONObjectUtils.getString(userInfoJSONObject, "email");
+			userUUID = JSONObjectUtils.getString(userInfoJSONObject, "sub");
 
-            user = UserManager.findOrCreateUser(userProfile).getMendixObject();
+            ForeignIdentityUtils.lockForeignIdentity(userUUID);
+
+            user = UserManager.findOrCreateUser(userProfile, userUUID, emailAddress).getMendixObject();
         } catch (Throwable e) {
             LOG.error("Something went wrong while provisioning the user with the provided user info", e);
 			Thread.currentThread().interrupt();
         } finally {
-            if (uuid != null) {
-                ForeignIdentityUtils.unlockForeignIdentity(uuid);
+            if (userUUID != null) {
+                ForeignIdentityUtils.unlockForeignIdentity(userUUID);
             }
         }
         return user;

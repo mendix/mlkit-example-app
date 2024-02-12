@@ -10,12 +10,15 @@
     .layout-atlas-responsive,
     .layout-atlas-responsive-default {
         @media (min-width: $screen-md) {
+            --closed-sidebar-width: #{$navsidebar-width-closed};
             .mx-scrollcontainer-shrink:not(.mx-scrollcontainer-open) > .region-sidebar,
             .mx-scrollcontainer-push:not(.mx-scrollcontainer-open) > .region-sidebar,
             .mx-scrollcontainer-slide:not(.mx-scrollcontainer-open) > .region-sidebar {
-                width: $navsidebar-width-closed !important;
+                @if (not $use-modern-client) {
+                    width: $navsidebar-width-closed !important;
+                }
 
-                .mx-scrollcontainer-wrapper > .mx-navigationtree ul li {
+                .mx-scrollcontainer-wrapper .mx-navigationtree ul li {
                     &.mx-navigationtree-has-items a {
                         white-space: nowrap;
                     }
@@ -70,34 +73,36 @@
             }
         }
 
-        .mx-scrollcontainer-slide {
-            &:not(.mx-scrollcontainer-open) > .region-sidebar {
-                overflow: hidden;
-            }
+        @if (not $use-modern-client) {
+            .mx-scrollcontainer-slide {
+                &:not(.mx-scrollcontainer-open) > .region-sidebar {
+                    overflow: hidden;
+                }
 
-            &.mx-scrollcontainer-open > .region-sidebar {
-                width: $navsidebar-width-closed !important;
+                &.mx-scrollcontainer-open > .region-sidebar {
+                    width: $navsidebar-width-closed !important;
 
-                & > .mx-scrollcontainer-wrapper {
-                    position: relative;
+                    & > .mx-scrollcontainer-wrapper {
+                        position: relative;
+                    }
+                }
+
+                .region-sidebar > .mx-scrollcontainer-wrapper {
+                    z-index: 2;
+                    left: -$navsidebar-width-closed;
+                    background-color: inherit;
                 }
             }
 
-            .region-sidebar > .mx-scrollcontainer-wrapper {
-                z-index: 2;
-                left: -$navsidebar-width-closed;
-                background-color: inherit;
-            }
-        }
+            // Push aside for mobile
+            @media (max-width: $screen-sm-max) {
+                .mx-scrollcontainer-open:not(.mx-scrollcontainer-slide) {
+                    width: 1100px;
+                }
 
-        // Push aside for mobile
-        @media (max-width: $screen-sm-max) {
-            .mx-scrollcontainer-open:not(.mx-scrollcontainer-slide) {
-                width: 1100px;
-            }
-
-            .mx-scrollcontainer-slide .toggle-btn {
-                display: inline-block !important;
+                .mx-scrollcontainer-slide .toggle-btn {
+                    display: inline-block !important;
+                }
             }
         }
 
@@ -133,14 +138,16 @@
                     font-weight: bold;
                 }
 
-                & > .mx-navigationtree .navbar-inner > ul > li {
+                .mx-navigationtree .navbar-inner > ul > li {
                     & > a {
                         height: $sidebar-icon-height;
                         padding: $spacing-small 0;
                         white-space: nowrap;
                         overflow: hidden;
                         // Glyph icon
-                        .glyphicon {
+                        .glyphicon,
+                        .mx-icon-lined,
+                        .mx-icon-filled {
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -163,6 +170,12 @@
                 border-color: transparent;
                 border-radius: 0;
                 background: transparent;
+                display: flex;
+            }
+
+            .mx-icon-filled,
+            .mx-icon-lined {
+                font-size: 20px;
             }
         }
     }

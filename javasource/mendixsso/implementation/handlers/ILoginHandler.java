@@ -11,7 +11,7 @@ import system.proxies.User;
 
 interface ILoginHandler {
 
-    void onCompleteLogin(IContext context, UserProfile openId, OIDCTokenResponse oidcTokenResponse, String continuation, IMxRuntimeRequest req, IMxRuntimeResponse resp);
+    void onCompleteLogin(IContext context, UserProfile openId, String userUUID, String emailAddress, OIDCTokenResponse oidcTokenResponse, String continuation, IMxRuntimeRequest req, IMxRuntimeResponse resp);
 
     void onAlreadyHasSession(IContext context, User user, ISession session, String uuid, String continuation, IMxRuntimeRequest req, IMxRuntimeResponse resp);
 

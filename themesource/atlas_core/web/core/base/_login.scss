@@ -93,7 +93,9 @@
                     flex: 1;
                 }
 
-                .glyphicon {
+                .glyphicon,
+                .mx-icon-lined,
+                .mx-icon-filled {
                     &:before {
                         transition: color 0.4s;
                     }

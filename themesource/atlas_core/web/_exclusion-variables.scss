@@ -3,6 +3,9 @@
 // Do not change this file, because it is core styling.
 //
 
+//== If set to true, Atlas will only include styles that are required for the modern client.
+$use-modern-client: false;
+
 //== Core style exclusion
 $exclude-bootstrap: false;
 $exclude-mxui: false;
@@ -60,6 +63,7 @@ $exclude-range-slider: false;
 $exclude-range-slider-helpers: false;
 $exclude-rating: false;
 $exclude-rating-helpers: false;
+$exclude-scroll-container: false;
 $exclude-simple-menu-bar: false;
 $exclude-simple-menu-bar-helpers: false;
 $exclude-slider: false;

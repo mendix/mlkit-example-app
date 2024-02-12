@@ -9,6 +9,7 @@ import com.mendix.m2ee.api.IMxRuntimeResponse;
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.systemwideinterfaces.core.ISession;
 import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.util.JSONObjectUtils;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.auth.ClientAuthentication;
@@ -23,6 +24,7 @@ import com.nimbusds.openid.connect.sdk.claims.SessionID;
 import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
 import com.nimbusds.openid.connect.sdk.validators.LogoutTokenValidator;
 import mendixsso.implementation.ConfigurationManager;
+import mendixsso.implementation.CustomSignupHintParameterMapper;
 import mendixsso.implementation.SessionManager;
 import mendixsso.implementation.UserMapper;
 import mendixsso.implementation.error.IncompatibleUserTypeException;
@@ -43,7 +45,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-import static mendixsso.implementation.utils.OpenIDUtils.extractUUID;
 import static mendixsso.implementation.utils.OpenIDUtils.getFingerPrint;
 
 public class OpenIDHandler extends RequestHandler {
@@ -220,23 +221,26 @@ public class OpenIDHandler extends RequestHandler {
             final JWT idToken = getAndValidateIDToken(idTokenResponse, expectedNonce);
 
             final Map<String, Object> claims = idToken.getJWTClaimsSet().toJSONObject();
-            final UserProfile userProfile = UserProfileUtils.getUserProfile(context, claims);
-            final String uuid = extractUUID(userProfile.getOpenId());
+            final String userUUID = JSONObjectUtils.getString(claims, "sub");
+            final String emailAddress = JSONObjectUtils.getString(claims, "email");
 
             // We assume that openId cannot be null since that would imply bigger issues higher up
             // in the
             // SSO stack.
-            ForeignIdentityUtils.lockForeignIdentity(uuid);
+            ForeignIdentityUtils.lockForeignIdentity(userUUID);
             try {
+                final UserProfile userProfile = UserProfileUtils.getUserProfile(context, claims);
                 loginHandler.onCompleteLogin(
                         context,
                         userProfile,
+                        userUUID,
+                        emailAddress,
                         idTokenResponse,
                         originalRequest.getContinuation(),
                         req,
                         resp);
             } finally {
-                ForeignIdentityUtils.unlockForeignIdentity(uuid);
+                ForeignIdentityUtils.unlockForeignIdentity(userUUID);
             }
         }
     }
@@ -384,7 +388,9 @@ public class OpenIDHandler extends RequestHandler {
         final IdentityProviderMetaData discovered =
                 IdentityProviderMetaDataCache.getInstance().getIdentityProviderMetaData();
         // Compose the request
-        final String signupHint = ConfigurationManager.getInstance().getSignupHint();
+        final String signupHint = CustomSignupHintParameterMapper.getInstance().getSignupHint(context,
+            SystemHttpRequestBuilder.build(context,req));
+
         final URI redirectURI = new URI(OpenIDUtils.getRedirectUri(req));
 
         final AuthenticationRequest.Builder authenticationRequestBuilder =
