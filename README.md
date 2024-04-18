@@ -40,15 +40,15 @@ Of course you can run neural networks in Mendix! Please see our examples below, 
 
 ##### Image Classification : ResNet50
 
-Find here a standard ResNet50 example fully implemented. Please refer to the [ONNX Model Zoo for details](https://github.com/onnx/models/tree/main/vision/classification/resnet) on model and training
+Find here a standard ResNet50 example fully implemented. Please refer to the [ONNX Model Zoo for details](https://github.com/onnx/models/tree/main/validated/vision/classification/resnet) on model and training
 
 ##### Style Transfer: Fast Neural Style
 
-Yes, you can make an app that turns any picture into a Vermeer with Mendix. Here we show you how can you apply a Mosaic style transfer from [this](https://github.com/onnx/models/tree/main/vision/style_transfer/fast_neural_style) model in ONNX Zoo, along with pre and post processors.
+Yes, you can make an app that turns any picture into a Vermeer with Mendix. Here we show you how can you apply a Mosaic style transfer from [this](https://github.com/onnx/models/tree/main/validated/vision/style_transfer/fast_neural_style) model in ONNX Zoo, along with pre and post processors.
 
 #### Language Models with Generative Interfaces
 
-In the BERT example you can see how we implemented [BERT](https://github.com/onnx/models/tree/main/text/machine_comprehension/bert-squad) in Mendix, complete with pre/post processors and tokenizers.
+In the BERT example you can see how we implemented [BERT](https://github.com/onnx/models/tree/main/validated/text/machine_comprehension/bert-squad) in Mendix, complete with pre/post processors and tokenizers.
 
 ### Training your own model
 
