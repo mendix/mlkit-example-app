@@ -9,7 +9,7 @@ This app is available in a GitHub repository, therefore you need to enable the [
 
 Just create a new Mendix App, go to 'Download from Version Control Server', choose 'private server', add this repository git address and there you go!
 
-Please make sure that the bertsquad-12-int8.onnx file is present in the /path/to/your/app/mlsource/bert folder. You can download it from [here](https://github.com/onnx/models/blob/main/text/machine_comprehension/bert-squad/model/bertsquad-12-int8.onnx) if needed.
+Please make sure that the bertsquad-12-int8.onnx file is present in the /path/to/your/app/mlsource/bert folder. You can download it from [here](https://github.com/onnx/models/blob/main/validated/text/machine_comprehension/bert-squad/model/bertsquad-12-int8.onnx) if needed.
 
 ### Note for Parallels Users
 This demo is packed with some computer vision libaries that may require a Virtual Machine restart or two before they are properly recognized
