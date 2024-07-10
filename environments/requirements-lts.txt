@@ -1,0 +1,11 @@
+skl2onnx==1.7.0
+onnx==1.8.1
+onnxruntime==1.6.0
+scipy==1.4.1
+six==1.15.0
+scikit-learn==0.22.1
+onnxconverter-common==1.7.0
+numpy==1.19.4
+protobuf==3.14.0
+typing-extensions==3.7.4.3
+pandas
